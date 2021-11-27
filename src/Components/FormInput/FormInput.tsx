@@ -24,7 +24,13 @@ const FormInput: React.FC<FormInputProps> = ({
         type={type}
         value={value}
       ></input>
-      {label ? <label className="form-input-label">{label}</label> : null}
+      {label ? (
+        <label
+          className={`${value?.length > 0 ? "shrink" : ""} form-input-label`}
+        >
+          {label}
+        </label>
+      ) : null}
     </div>
   );
 };

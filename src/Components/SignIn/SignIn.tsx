@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import FormInput from "../FormInput/FormInput";
 import CustomButton from "../CustomButton/CustomButton";
-import { signInWithGoogle } from "../../Firebase/firebase.utils";
+import { auth, signInWithGoogle } from "../../Firebase/firebase.utils";
+import "./SignIn.styles.scss";
 interface UserInput {
   email: string;
   password: string;
@@ -9,14 +10,24 @@ interface UserInput {
 
 const SignIn = (): JSX.Element => {
   const [input, setInput] = useState({ email: "", password: "" });
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // clears the state
+    const { email, password } = input;
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      console.log(error);
+    }
+    // clears the state & form inputs
     setInput({ email: "", password: "" });
   };
-  const handleChange = (field: keyof UserInput, value: any) => {
+  const handleChange = (
+    field: keyof UserInput,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setInput({
-      [field]: value,
+      ...input,
+      [field]: e.target.value,
     } as Pick<UserInput, typeof field>);
   };
   return (
@@ -26,22 +37,29 @@ const SignIn = (): JSX.Element => {
       <form onSubmit={handleSubmit}>
         <FormInput
           type="email"
-          handleChange={handleChange}
+          handleChange={(e) => handleChange("email", e)}
           value={input.email}
           label="Email"
         />
         <FormInput
           type="password"
           value={input.password}
-          handleChange={handleChange}
+          handleChange={(e) => handleChange("password", e)}
           label="Password"
         />
-        <CustomButton label={"Sign In"} type={"submit"} />
-        <CustomButton
-          label={"Sign In with Google"}
-          type={"submit"}
-          onClick={signInWithGoogle}
-        ></CustomButton>
+        <div className="buttons">
+          <CustomButton
+            label={"Sign In"}
+            type={"submit"}
+            isGoogleSignIn={false}
+          />
+          <CustomButton
+            label={"Sign In with Google"}
+            type={"submit"}
+            onClick={signInWithGoogle}
+            isGoogleSignIn={true}
+          ></CustomButton>
+        </div>
       </form>
     </div>
   );

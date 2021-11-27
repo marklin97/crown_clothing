@@ -5,15 +5,21 @@ interface ButtonProps {
   label: string;
   type: "submit" | "reset" | "button";
   onClick?: any;
+  isGoogleSignIn?: boolean;
 }
 
 const CustomButton: React.FC<ButtonProps> = ({
   label,
   type,
   onClick,
+  isGoogleSignIn,
 }): JSX.Element => {
   return (
-    <button className="custom-button" type={type} onClick={onClick}>
+    <button
+      className={`${isGoogleSignIn ? "google-sign-in" : ""} custom-button`}
+      type={type}
+      onClick={onClick}
+    >
       {label}
     </button>
   );

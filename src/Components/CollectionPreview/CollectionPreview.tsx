@@ -11,7 +11,6 @@ const CollectionPreview: React.FC<CollectionPreviewProps> = ({
   title,
   items,
 }): JSX.Element => {
-  console.log("hi");
   return (
     <div className="collection-preview">
       <h1 className="title">{title.toUpperCase()}</h1>
